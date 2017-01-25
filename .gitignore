@@ -1,0 +1,5 @@
+# Ignore log files
+*.log
+
+# Avoid checking in the default config
+hasibot.yaml
