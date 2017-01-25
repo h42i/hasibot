@@ -97,7 +97,7 @@ def prepare_argument_parser():
                             add_help=True)
     parser.add_argument('-c', '--conf', default='hasibot.yaml',
                         help='path to the configuration file')
-    parser.add_argument('-l', '--log', default='hasibot.log',
+    parser.add_argument('-l', '--log',
                         help='path to the configuration file')
     return parser
 
@@ -105,8 +105,11 @@ def main():
     """Well... The main() method. Nuff said.
     """
     args = prepare_argument_parser().parse_args()
-    logging.basicConfig(filename=args.log, format='%(levelname)-8s %(message)s',
-                        level=logging.INFO)
+    if args.log:
+        logging.basicConfig(filename=args.log, format='%(levelname)-8s %(message)s',
+                            level=logging.INFO)
+    else:
+        logging.basicConfig(format='%(levelname)-8s %(message)s', level=logging.INFO)
 
     # Read and parse config
     with open(args.conf) as conf_file:
