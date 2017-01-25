@@ -1,0 +1,4 @@
+jid:    'ircbot@jabber.yourserve.it'
+pw:     'supersecret'
+irc:    '#channel@irc.jabber.youserve.it'
+xmpp:   'muc@conference.jabber.youserve.it'
