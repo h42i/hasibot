@@ -48,8 +48,8 @@ class HaSiBot(ClientXMPP):
         """Dispatcher handler that forwards messages from the Telegram group chat to IRC and XMPP.
         """
         msg = update.message
-        # Ignore messages from other chats than the configured one
-        if msg.chat.id != self.tg_chat:
+        # Ignore messages from other chats than the configured one and other updates
+        if msg is None or msg.chat.id != self.tg_chat:
             return
         self._send_xmpp_message(self.irc_room, msg.from_user.name, msg.text)
         self._send_xmpp_message(self.xmpp_room, msg.from_user.name, msg.text)
