@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HaSi XMPP-to-IRC bridge bot.
+"""HaSi Telegram-XMPP-IRC bridge bot.
 """
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
@@ -13,8 +13,8 @@ from sleekxmpp import ClientXMPP
 from telegram.ext import Filters, MessageHandler, Updater
 
 class HaSiBot(ClientXMPP):
-    """A fairly simple bot that relays messages from HaSi's IRC channel (mapped
-    to a special MUC on the XMPP server) to the HaSi MUC and vice versa.
+    """A fairly simple bot that relays messages from HaSi's IRC channel (mapped to a special MUC on
+       the XMPP server) to the HaSi MUC and Telegram group chat and vice versa.
     """
 
     def __init__(self, config):
@@ -114,20 +114,22 @@ def _format_message(author, text):
 def _prepare_argument_parser():
     """Creates and configures the argument parser for the CLI.
     """
-    parser = ArgumentParser(description='HaSi XMPP-to-IRC bridge bot.',
+    parser = ArgumentParser(description='HaSi Telegram-XMPP-IRC bridge bot.',
                             epilog=dedent("""\
                             The config file must be valid YAML and contain the following items:
-                            jid:    the bot's JID on the server
-                            pw:     the bot's password
-                            irc:    the JID of the MUC that maps to the IRC channel
-                            xmpp:   the JID of the "native" XMPP MUC
+                            jid:      the bot's JID on the server
+                            pw:       the bot's password
+                            irc:      the JID of the MUC that maps to the IRC channel
+                            xmpp:     the JID of the "native" XMPP MUC
+                            tg_chat:  the Telegram group chat's ID
+                            tg_token: the Telegram API token
                             """),
                             formatter_class=RawDescriptionHelpFormatter,
                             add_help=True)
     parser.add_argument('-c', '--conf', default='hasibot.yaml',
                         help='path to the configuration file')
     parser.add_argument('-l', '--log',
-                        help='path to the configuration file')
+                        help='path to a file to which log messages should go')
     return parser
 
 def main():
