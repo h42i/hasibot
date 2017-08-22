@@ -20,6 +20,7 @@ irc:      the JID of the MUC that maps to the IRC channel
 xmpp:     the JID of the "native" XMPP MUC
 tg_chat:  the Telegram group chat's ID
 tg_token: the Telegram API token
+ignore:   a list of IRC nicks to ignore (useful for bots etc.)
 ```
 
 You can find an example configuration in the repository.

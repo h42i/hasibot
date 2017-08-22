@@ -27,6 +27,7 @@ class HaSiBot(ClientXMPP):
         self.irc_room = config['irc']
         self.xmpp_room = config['xmpp']
         self.tg_chat = config['tg_chat']
+        self.ignore_list = config['ignore']
 
         self.add_event_handler("session_start", self.sign_in)
         self.add_event_handler("groupchat_message", self.forward_message)
@@ -88,6 +89,11 @@ class HaSiBot(ClientXMPP):
             debug('Ignoring message from %s', self.nick)
             return
 
+        for nick in self.ignore_list:
+            if author == nick:
+                debug('Ignoring message from %s', nick)
+                return
+
         room = msg['from'].jid
         room = room[:room.index('/')]
         if room == self.irc_room:
@@ -122,6 +128,7 @@ def _prepare_argument_parser():
                             xmpp:     the JID of the "native" XMPP MUC
                             tg_chat:  the Telegram group chat's ID
                             tg_token: the Telegram API token
+                            ignore:   a list of IRC nicks to ignore (useful for bots etc.)
                             """),
                             formatter_class=RawDescriptionHelpFormatter,
                             add_help=True)

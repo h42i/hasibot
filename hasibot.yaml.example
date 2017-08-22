@@ -4,3 +4,5 @@ irc:        '#channel@irc.jabber.youserve.it'
 xmpp:       'muc@conference.jabber.youserve.it'
 tg_chat:    'group_chat'
 tg_token:   '123456789:asdkjdlka49sa9ASDFka934Askl30'
+ignore:
+             - 'awesome_bot'
