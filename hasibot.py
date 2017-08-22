@@ -5,7 +5,6 @@
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 import logging
 from logging import debug, info, warning
-from re import match
 from textwrap import dedent
 
 from yaml import safe_load
