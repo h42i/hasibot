@@ -51,6 +51,7 @@ class HaSiBot(ClientXMPP):
         # Ignore messages from other chats than the configured one and other updates
         if msg is None or msg.chat.id != self.tg_chat:
             return
+        info('Relaying message from %s', self.tg_chat)
         self._send_xmpp_message(self.irc_room, msg.from_user.name, msg.text)
         self._send_xmpp_message(self.xmpp_room, msg.from_user.name, msg.text)
 
