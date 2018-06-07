@@ -10,6 +10,8 @@ The script requires three libraries:
 * python-telegram-bot (guess what this does)
 * pyyaml (for parsing the config file)
 
+Please note that you might want to disable the telegram bots 'privacy mode'! Otherwise it only sees direct replys in telegram groups!
+
 ## Configuration
 The Bot relies on a straight-forward YAML configuration file:
 

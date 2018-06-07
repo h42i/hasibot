@@ -34,7 +34,10 @@ class HaSiBot(ClientXMPP):
 
         self._tg_updater = Updater(config['tg_token'])
         self._tg_dispatcher = self._tg_updater.dispatcher
-        self._tg_dispatcher.add_handler(MessageHandler(Filters.text, self.handle_telegram_message))
+        self._tg_dispatcher.add_handler(MessageHandler(Filters.text, self.handle_telegram_text))
+        self._tg_dispatcher.add_handler(MessageHandler(Filters.sticker, self.handle_telegram_sticker))
+        self._tg_dispatcher.add_handler(MessageHandler(Filters.document, self.handle_telegram_document))
+        #self._tg_dispatcher.add_handler(MessageHandler(~ Filters.text, self.handle_telegram_test))
         self._tg_updater.start_polling()
 
         # Connect to the XMPP server and start processing XMPP stanzas.
@@ -44,16 +47,48 @@ class HaSiBot(ClientXMPP):
         else:
             print("Unable to connect.")
 
-    def handle_telegram_message(self, bot, update):
+    def handle_telegram_text(self, bot, update):
         """Dispatcher handler that forwards messages from the Telegram group chat to IRC and XMPP.
         """
         msg = update.message
         # Ignore messages from other chats than the configured one and other updates
-        if msg is None or msg.chat.id != self.tg_chat:
+
+        if not self.check_telegram_message(msg):
             return
+
         info('Relaying message from %s', self.tg_chat)
         self._send_xmpp_message(self.irc_room, msg.from_user.name, msg.text)
         self._send_xmpp_message(self.xmpp_room, msg.from_user.name, msg.text)
+
+    def handle_telegram_sticker(self, bot, update):
+        msg = update.message
+
+        if not self.check_telegram_message(msg):
+            return
+
+        msg_str = 'Sticker: {} {}'.format(msg.sticker.emoji, msg.sticker.get_file().file_path)
+        self._send_xmpp_message(self.irc_room, msg.from_user.name, msg_str)
+        self._send_xmpp_message(self.xmpp_room, msg.from_user.name, msg_str)
+
+    def handle_telegram_document(self, bot, update):
+        msg = update.message
+
+        if not self.check_telegram_message(msg):
+            return
+
+        msg_str = 'Document: {}'.format(msg.document.get_file().file_path)
+        self._send_xmpp_message(self.irc_room, msg.from_user.name, msg_str)
+        self._send_xmpp_message(self.xmpp_room, msg.from_user.name, msg_str)
+
+    def check_telegram_message(self, msg):
+        if msg is None:
+            info('Received None msg from Telegram')
+            return False
+        elif str(msg.chat.id) != str(self.tg_chat):
+            info('Received msg from wrong Telegram chat! Was: "%s", should be: "%s"', msg.chat.id, self.tg_chat)
+            return False
+
+        return True
 
     def sign_in(self, event):
         """
